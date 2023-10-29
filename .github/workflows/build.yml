@@ -29,7 +29,13 @@ jobs:
       
       - name: Terraform Plan
         run: terraform plan -input=false
+        env:
+          TF_VAR_mysql_user: ${{ secrets.MYSQL_USER }}
+          TF_VAR_mysql_password: ${{ secrets.MYSQL_PASSWORD }}
         
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         run: terraform apply -auto-approve
+        env:
+          TF_VAR_mysql_user: ${{ secrets.MYSQL_USER }}
+          TF_VAR_mysql_password: ${{ secrets.MYSQL_PASSWORD }}
