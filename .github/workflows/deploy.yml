@@ -1,14 +1,14 @@
-name: Build
+name: Deploy
+
 on:
-  pull_request:
+  push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: development
+    environment: production
     
     steps:
       - name: Checkout code
@@ -29,8 +29,9 @@ jobs:
       - name: Terraform Init
         run: terraform init
       
-      - name: Terraform Plan
-        run: terraform plan -input=false
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: terraform apply -auto-approve
         env:
           TF_VAR_mysql_user: ${{ secrets.MYSQL_USER }}
           TF_VAR_mysql_password: ${{ secrets.MYSQL_PASSWORD }}
